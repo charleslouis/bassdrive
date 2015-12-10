@@ -26,28 +26,27 @@ var paths = {
 				'./bower_components/modernizr/modernizr.js',
 				'./bower_components/jquery/dist/jquery.js',
 				'./bower_components/jquery-placeholder/jquery.placeholder.js',
-				'./bower_components/jquery.cookie/jquery.cookie.js',
 				'./bower_components/fastclick/lib/fastclick.js',
-				'./bower_components/foundation/js/foundation/foundation.js',
-				'./bower_components/foundation/js/foundation/foundation.topbar.js'
+				'./node_modules/foundation-apps/js/angular/app.js',
+				'./node_modules/foundation-apps/js/angular/foundation.js'
 			],
-			sources: ['./public/js/custom/*.js'],
+			sources: ['./radio/js/custom/*.js'],
 			output: {
-				folder: './public/js/',
+				folder: './radio/js/',
 				mainScriptsFile: 'scripts.js'
 			}
 		}
 	},
 	'style': {
-		all: './public/styles/**/*.scss',
-		output: './public/styles/'
+		all: './radio/styles/**/*.scss',
+		output: './radio/styles/'
 	},
 	'jadeFiles': {
-		templates: './public/classes/**/**/*.jade'
+		templates: './radio/*.jade'
 	},
 	'html': {
-		distFolder: './public/classes/',
-		distFiles: './public/classes/**/**/*.html'
+		distFolder: './radio/',
+		distFiles: './radio/*.html'
 	}	
 
 
@@ -68,7 +67,7 @@ var paths = {
 gulp.task('sass:dev', function () {
   gulp.src(paths.style.all)
 	.pipe(sourcemaps.init())
-	.pipe(sass({includePaths: [ './public/styles/foundation' ]}).on('error', sass.logError))
+	.pipe(sass({includePaths: [ './radio/styles/foundation' ]}).on('error', sass.logError))
 	.pipe(gulp.dest(paths.style.output))
 	.pipe(livereload());
 });

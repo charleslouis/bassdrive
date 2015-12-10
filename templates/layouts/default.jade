@@ -20,11 +20,12 @@ html
 			//- Remember to include it in your templates when you override the intro and content blocks!
 
 			//- The Intro block appears above flash messages (used for temporary information display)
-			.row: .small-8.medium-6
-			block intro
+			.row: .columns.medium-4.shows
+			block shows
 
 			//- The content block should contain the body of your template's content
-			block content
+			.row: .columns.medium-8.player
+			block player
 
 
 		//- FOOTER
