@@ -1,15 +1,14 @@
 //- HEADER
-.container
-
-	//- Customise your site's navigation by changing the navLinks Array in ./routes/middleware.js
-	//- ... or completely change this header to suit your design.
-	nav.top-bar(data-topbar='', role='navigation')
-		ul.title-area
-			li.name
-				h1
-					a(href='/') Accueil
-			li.toggle-topbar.menu-icon
-				a(href='#')
-					span Menu
-		section.top-bar-section
-			ul.right
+.grid-frame.vertical(ng-app='myApp')
+	#container(ng-controller='PlayerCtrl')
+		.dark.title-bar
+			span.left
+				a(href='bassdrivearchive.com', target='_blank') BassDrive Radio
+			span.title.center {{currentSong.text}}
+			span.right
+				a(href='#') 00.00.10
+		.row
+			.columns.medium-6
+				a.dark.extend.button(ng-click='play(currentSong.url)') Play
+			.columns.medium-6
+				a.dark.extend.button(ng-click='pause()') Pause
