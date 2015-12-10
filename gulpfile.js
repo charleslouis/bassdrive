@@ -26,9 +26,10 @@ var paths = {
 				'./bower_components/jquery/dist/jquery.js',
 				'./bower_components/jquery-placeholder/jquery.placeholder.js',
 				'./bower_components/angular/angular.js',
+				'./bower_components/angular-animate/angular-animate.js',
+				'./bower_components/angular-ui-router/release/angular-ui-router.js',
 				'./bower_components/fastclick/lib/fastclick.js',
-				// './node_modules/foundation-apps/js/angular/app.js',
-				'./node_modules/foundation-apps/dist/js/foundation-apps.js',
+				'./node_modules/foundation-apps/js/angular/components/accordion/accordion.js',
 				'./radio/js/custom/yql.js',
 				'./radio/js/custom/parse-bassdrive.js',
 				'./radio/js/custom/app.js'

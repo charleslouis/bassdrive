@@ -1,33 +1,31 @@
 'use strict';
 
 var appRadio = angular.module('appRadio', [
-	// 'ui.router',
-	// 'ngAnimate',
-	// 'foundation',
-	// 'foundation.dynamicRouting',
+	'ui.router',
+	'ngAnimate',
+	'foundation.accordion'
 	// 'foundation.dynamicRouting.animations'
-]);
-	// .config(config)
-	// .run(run)
- //  ;
+])
+	.config(config)
+	.run(run);
 
- //  config.$inject = ['$urlRouterProvider', '$locationProvider'];
+  config.$inject = ['$urlRouterProvider', '$locationProvider'];
 
- //  function config($urlProvider, $locationProvider) {
-	// $urlProvider.otherwise('/');
+  function config($urlProvider, $locationProvider) {
+	$urlProvider.otherwise('/');
 
-	// $locationProvider.html5Mode({
-	//   enabled: false,
-	//   requireBase: false
-	// });
+	$locationProvider.html5Mode({
+	  enabled: false,
+	  requireBase: false
+	});
 
-	// $locationProvider.hashPrefix('!');
- //  }
+	$locationProvider.hashPrefix('!');
+  }
   
 
- //  function run() {
-	// FastClick.attach(document.body);
- //  }
+  function run() {
+	FastClick.attach(document.body);
+  }
 	
 
 
@@ -41,12 +39,13 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 	
 	audio.play( $scope.currentSong.url );
 	$scope.playerTimer = '00:00:00';
-	
+	$scope.showDays = showDaysJSON;
+
 	setTimeout(function(){
 		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
 		$scope.showDays = showDaysJSON;
 		$scope.$apply();
-	}, 10000);  
+	}, 5000);  
 	
 	$scope.setCurrentSong = function(song){
 		console.log(song);
