@@ -1,0 +1,35 @@
+doctype html
+html
+
+	//- HTML HEADER
+	head
+		include head
+
+
+	//- HTML BODY
+	body
+
+		//- HEADER
+		include header
+
+		//- BODY
+		div
+
+			//- NOTE:
+			//- There is no .container wrapping class around body blocks to allow more flexibility in design.
+			//- Remember to include it in your templates when you override the intro and content blocks!
+
+			//- The Intro block appears above flash messages (used for temporary information display)
+			.row: .small-8.medium-6
+			block intro
+
+			//- The content block should contain the body of your template's content
+			block content
+
+
+		//- FOOTER
+		include footer
+
+
+		//- //- JAVASCRIPT
+		include footer-scripts
