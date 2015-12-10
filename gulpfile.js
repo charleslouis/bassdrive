@@ -5,9 +5,8 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint'),
 	jshintReporter = require('jshint-stylish'),
 	watch = require('gulp-watch'),
-	shell = require('gulp-shell');
-
-var sass = require('gulp-sass'),
+	sass = require('gulp-sass'),
+	shell = require('gulp-shell'),
     minifycss = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
@@ -26,11 +25,15 @@ var paths = {
 				'./bower_components/modernizr/modernizr.js',
 				'./bower_components/jquery/dist/jquery.js',
 				'./bower_components/jquery-placeholder/jquery.placeholder.js',
+				'./bower_components/angular/angular.js',
 				'./bower_components/fastclick/lib/fastclick.js',
-				'./node_modules/foundation-apps/js/angular/app.js',
-				'./node_modules/foundation-apps/js/angular/foundation.js'
+				// './node_modules/foundation-apps/js/angular/app.js',
+				'./node_modules/foundation-apps/dist/js/foundation-apps.js',
+				'./radio/js/custom/yql.js',
+				'./radio/js/custom/parse-bassdrive.js',
+				'./radio/js/custom/app.js'
 			],
-			sources: ['./radio/js/custom/*.js'],
+			sources: ['./radio/js/custom/*'],
 			output: {
 				folder: './radio/js/',
 				mainScriptsFile: 'scripts.js'

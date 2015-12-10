@@ -7,30 +7,29 @@ html
 
 
 	//- HTML BODY
-	body
+	body(ng-app='appRadio')
 
 		//- HEADER
-		include header
+		.grid-frame.vertical
+			#container(ng-controller='PlayerCtrl')		
+				include header
 
-		//- BODY
-		div
+				//- NOTE:
+				//- There is no .container wrapping class around body blocks to allow more flexibility in design.
+				//- Remember to include it in your templates when you override the intro and content blocks!
 
-			//- NOTE:
-			//- There is no .container wrapping class around body blocks to allow more flexibility in design.
-			//- Remember to include it in your templates when you override the intro and content blocks!
+				//- The Intro block appears above flash messages (used for temporary information display)
+				.row: .columns.medium-4.shows
+				block shows
 
-			//- The Intro block appears above flash messages (used for temporary information display)
-			.row: .columns.medium-4.shows
-			block shows
-
-			//- The content block should contain the body of your template's content
-			.row: .columns.medium-8.player
-			block player
-
-
-		//- FOOTER
-		include footer
+				//- The content block should contain the body of your template's content
+				.row: .columns.medium-8.player
+				block player
 
 
-		//- //- JAVASCRIPT
-		include footer-scripts
+				//- FOOTER
+				include footer
+
+
+				//- //- JAVASCRIPT
+				include footer-scripts

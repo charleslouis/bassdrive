@@ -1,22 +1,50 @@
-extends ../templates/layouts/default.jade
+doctype html
+html
 
-block shows
-	h1 Shows
-block player
-	h1 Test
+	//- HTML HEADER
+	head
+		include ../templates/layouts/head
 
-	//
-		<zf-accordion>
-		<zf-accordion-item title="Input your title here">
-		Content goes here
-		</zf-accordion-item>
-		</zf-accordion>
-	ul#days.days
-		li.day(ng-repeat='day in showDays track by $index')
-		| {{day.text}}
-		ul.shows
-			li.show(ng-repeat='show in day.shows track by $index')
-			| {{show.name}}
-			ul.songs
-				li.song(ng-repeat='song in show.songs track by $index')
-				span(ng-click='setCurrentSong(song)') {{song.text}}
+
+	//- HTML BODY
+	body(ng-app='appRadio')
+
+		//- HEADER
+		.grid-frame.vertical
+			#container(ng-controller='PlayerCtrl')		
+				include ../templates/layouts/header
+
+				//- NOTE:
+				//- There is no .container wrapping class around body blocks to allow more flexibility in design.
+				//- Remember to include it in your templates when you override the intro and content blocks!
+
+				//- The Intro block appears above flash messages (used for temporary information display)
+				.row: .columns.medium-4.shows
+					h1 Shows
+					//
+						<zf-accordion>
+						<zf-accordion-item title="Input your title here">
+						Content goes here
+						</zf-accordion-item>
+						</zf-accordion>
+					ul#days.days
+						li.day(ng-repeat='day in showDays track by $index')
+							span {{day.text}}
+							ul.shows
+								li.show(ng-repeat='show in day.shows track by $index')
+									span {{show.name}}
+									ul.songs
+										li.song(ng-repeat='song in show.songs track by $index')
+											span(ng-click='setCurrentSong(song)') {{song.text}}
+
+				//- The content block should contain the body of your template's content
+				.row: .columns.medium-8.player
+				block player
+
+
+				//- FOOTER
+				include ../templates/layouts/footer
+
+
+				//- //- JAVASCRIPT
+				include ../templates/layouts/footer-scripts

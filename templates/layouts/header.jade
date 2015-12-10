@@ -1,14 +1,13 @@
 //- HEADER
-.grid-frame.vertical(ng-app='myApp')
-	#container(ng-controller='PlayerCtrl')
-		.dark.title-bar
-			span.left
-				a(href='bassdrivearchive.com', target='_blank') BassDrive Radio
-			span.title.center {{currentSong.text}}
-			span.right
-				a(href='#') 00.00.10
-		.row
-			.columns.medium-6
-				a.dark.extend.button(ng-click='play(currentSong.url)') Play
-			.columns.medium-6
-				a.dark.extend.button(ng-click='pause()') Pause
+.dark.title-bar
+	span.left
+		a(href='bassdrivearchive.com', target='_blank') BassDrive Radio
+	span.title.center {{currentSong.text}}
+	span.right
+		a(href='#')
+			|	{{playerTimer | date : format : h:mm:ss}}
+.row
+	.columns.medium-6
+		a.dark.extend.button(ng-click='play(currentSong.url)') Play
+	.columns.medium-6
+		a.dark.extend.button(ng-click='pause()') Pause
