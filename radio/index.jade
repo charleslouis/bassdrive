@@ -11,29 +11,30 @@ html
 
 		//- HEADER
 		.grid-frame.vertical
-			#container(ng-controller='PlayerCtrl')		
+			#container(ng-controller='PlayerCtrl')
 				include ../templates/layouts/header
 
-				//- NOTE:
-				//- There is no .container wrapping class around body blocks to allow more flexibility in design.
-				//- Remember to include it in your templates when you override the intro and content blocks!
+				
+				.grid-block
+					.grid-block
+						a.dark.expand.button(ng-click='play(currentSong.url)') Play
+					.grid-block
+						a.dark.expand.button(ng-click='pause()') Pause
 
-				//- The Intro block appears above flash messages (used for temporary information display)
-				.row: .columns.medium-4.shows
-					h1 Shows
+				.grid-block.medium-4
 					zf-accordion#days.days
 						zf-accordion-item.day(ng-repeat='day in showDays track by $index')
 							span {{day.text}}
-							zf-accordion.shows
-								zf-accordion-item.show(ng-repeat='show in day.shows track by $index')
+							ul.shows
+								li.show(ng-repeat='show in day.shows track by $index')
 									span {{show.name}}
 									ul.songs
 										li.song(ng-repeat='song in show.songs track by $index')
 											span(ng-click='setCurrentSong(song)') {{song.text}}
 
 				//- The content block should contain the body of your template's content
-				.row: .columns.medium-8.player
-				block player
+				.grid-block.medium-4
+					h2 test
 
 
 				//- FOOTER
