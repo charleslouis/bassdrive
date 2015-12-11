@@ -33,6 +33,7 @@ var paths = {
 				'./node_modules/foundation-apps/js/angular/services/foundation.core.animation.js',
 				'./node_modules/foundation-apps/js/angular/components/accordion/accordion.js',
 				'./node_modules/foundation-apps/js/angular/components/tabs/tabs.js',
+				'./radio/components/iconic/iconic.js',
 				'./radio/js/custom/yql.js',
 				'./radio/js/custom/parse-bassdrive.js',
 				'./radio/js/custom/app.js'

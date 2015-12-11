@@ -13,25 +13,34 @@ html
 		.grid-frame.vertical(ng-controller='PlayerCtrl')
 			include ../templates/layouts/header
 
-			
+
+			.menu-group.dark
+				.menu-group-left
+					ul.menu-bar
+				.menu-group-right
+					ul.menu-bar
+						li
+							a(ng-click='play(currentSong.url)')
+								img.iconic-color-primary(zf-iconic='', icon='chevron', size='medium', class='iconic-color-secondary')
+								| Play
+						li
+							a(ng-click='pause()')
+								img.iconic-color-primary(zf-iconic='', icon='chevron', size='medium', class='iconic-color-secondary')
+								| Pause
+
 			.grid-block
-				.grid-block
-					a.dark.expand.button(ng-click='play(currentSong.url)') Play
-				.grid-block
-					a.dark.expand.button(ng-click='pause()') Pause
+				.grid-block.medium-4
+					zf-accordion#days.days.grid-block.vertical(auto-open="false")
+						zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
+							zf-accordion.shows(auto-open="false")
+								zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
+									ul.songs.unstyled
+										li.song(ng-repeat='song in show.songs track by $index')
+											span.button.expand.dark(ng-click='setCurrentSong(song)') {{song.text}}
 
-			.grid-block.medium-4
-				zf-accordion#days.days.grid-block.vertical(auto-open="false")
-					zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
-						zf-accordion.shows(auto-open="false")
-							zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
-								ul.songs.unstyled
-									li.song(ng-repeat='song in show.songs track by $index')
-										span.button.expand.dark(ng-click='setCurrentSong(song)') {{song.text}}
-
-			//- The content block should contain the body of your template's content
-			.grid-block.medium-8
-				h2 test
+				//- The content block should contain the body of your template's content
+				.grid-block.medium-8
+					h2 {{song.text}}
 
 
 			//- FOOTER

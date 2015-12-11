@@ -5471,3 +5471,11 @@ blockquote p {
 
 .songs {
   margin-left: 0; }
+
+.menu-bar {
+  -ms-overflow-x: visible;
+  overflow-x: visible; }
+
+.menu-bar {
+  -ms-overflow-x: visible;
+  overflow-x: visible; }
