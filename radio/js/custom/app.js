@@ -3,7 +3,10 @@
 var appRadio = angular.module('appRadio', [
 	'ui.router',
 	'ngAnimate',
-	'foundation.accordion'
+	'foundation.core',
+	'foundation.core.animation',	
+	'foundation.accordion',
+	'foundation.tabs'
 	// 'foundation.dynamicRouting.animations'
 ])
 	.config(config)

@@ -48973,6 +48973,341 @@ angular.module('ui.router.state')
 (function() {
   'use strict';
 
+  angular.module('foundation.core', [
+      'foundation.core.animation'
+    ])
+    .service('FoundationApi', FoundationApi)
+    .service('FoundationAdapter', FoundationAdapter)
+    .factory('Utils', Utils)
+    .run(Setup);
+  ;
+
+  FoundationApi.$inject = ['FoundationAnimation'];
+
+  function FoundationApi(FoundationAnimation) {
+    var listeners  = {};
+    var settings   = {};
+    var uniqueIds  = [];
+    var service    = {};
+
+    service.subscribe           = subscribe;
+    service.unsubscribe         = unsubscribe;
+    service.publish             = publish;
+    service.getSettings         = getSettings;
+    service.modifySettings      = modifySettings;
+    service.generateUuid        = generateUuid;
+    service.toggleAnimate       = toggleAnimate;
+    service.closeActiveElements = closeActiveElements;
+    service.animate             = animate;
+    service.animateAndAdvise    = animateAndAdvise;
+
+    return service;
+
+    function subscribe(name, callback) {
+      if (!listeners[name]) {
+        listeners[name] = [];
+      }
+
+      listeners[name].push(callback);
+      return true;
+    }
+
+    function unsubscribe(name, callback) {
+      if (listeners[name] !== undefined) {
+        delete listeners[name];
+      }
+      if (typeof callback == 'function') {
+          callback.call(this);
+      }
+    }
+
+    function publish(name, msg) {
+      if (!listeners[name]) {
+        listeners[name] = [];
+      }
+
+      listeners[name].forEach(function(cb) {
+        cb(msg);
+      });
+
+      return;
+    }
+
+    function getSettings() {
+      return settings;
+    }
+
+    function modifySettings(tree) {
+      settings = angular.extend(settings, tree);
+      return settings;
+    }
+
+    function generateUuid() {
+      var uuid = '';
+
+      //little trick to produce semi-random IDs
+      do {
+        uuid += 'zf-uuid-';
+        for (var i=0; i<15; i++) {
+          uuid += Math.floor(Math.random()*16).toString(16);
+        }
+      } while(!uniqueIds.indexOf(uuid));
+
+      uniqueIds.push(uuid);
+      return uuid;
+    }
+
+    function toggleAnimate(element, futureState) {
+      FoundationAnimation.toggleAnimate(element, futureState);
+    }
+
+    function closeActiveElements(options) {
+      var self = this;
+      options = options || {};
+      var activeElements = document.querySelectorAll('.is-active[zf-closable]');
+      // action sheets are nested zf-closable elements, so we have to target the parent
+      var nestedActiveElements = document.querySelectorAll('[zf-closable] > .is-active');
+
+      if (activeElements.length) {
+        angular.forEach(activeElements, function(el) {
+          if (options.exclude !== el.id) {
+            self.publish(el.id, 'close');
+          }
+        });
+      }
+      if (nestedActiveElements.length) {
+        angular.forEach(nestedActiveElements, function(el) {
+          var parentId = el.parentNode.id;
+          if (options.exclude !== parentId) {
+            self.publish(parentId, 'close');
+          }
+        });
+      }
+    }
+
+    function animate(element, futureState, animationIn, animationOut) {
+      return FoundationAnimation.animate(element, futureState, animationIn, animationOut);
+    }
+
+    function animateAndAdvise(element, futureState, animationIn, animationOut) {
+      var promise = FoundationAnimation.animate(element, futureState, animationIn, animationOut);
+      promise.then(function() {
+        publish(element[0].id, futureState ? 'active-true' : 'active-false');
+      }, function() {
+        publish(element[0].id, 'active-aborted');
+      });
+      return promise;
+    }
+  }
+
+  FoundationAdapter.$inject = ['FoundationApi'];
+
+  function FoundationAdapter(foundationApi) {
+
+    var service    = {};
+
+    service.activate = activate;
+    service.deactivate = deactivate;
+
+    return service;
+
+    function activate(target) {
+      foundationApi.publish(target, 'show');
+    }
+
+    function deactivate(target) {
+      foundationApi.publish(target, 'hide');
+    }
+  }
+
+
+  function Utils() {
+    var utils = {};
+
+    utils.throttle = throttleUtil;
+
+    return utils;
+
+    function throttleUtil(func, delay) {
+      var timer = null;
+
+      return function () {
+        var context = this, args = arguments;
+
+        if (timer === null) {
+          timer = setTimeout(function () {
+            func.apply(context, args);
+            timer = null;
+          }, delay);
+        }
+      };
+    }
+  }
+
+  function Setup() {
+    // Attach FastClick
+    if (typeof(FastClick) !== 'undefined') {
+      FastClick.attach(document.body);
+    }
+
+    // Attach viewport units buggyfill
+    if (typeof(viewportUnitsBuggyfill) !== 'undefined') {
+      viewportUnitsBuggyfill.init();
+    }
+  }
+
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('foundation.core.animation', [])
+    .service('FoundationAnimation', FoundationAnimation)
+  ;
+
+  FoundationAnimation.$inject = ['$q'];
+
+  function FoundationAnimation($q) {
+    var animations = [];
+    var service = {};
+
+    var initClasses        = ['ng-enter', 'ng-leave'];
+    var activeClasses      = ['ng-enter-active', 'ng-leave-active'];
+    var activeGenericClass = 'is-active';
+    var events = [
+      'webkitAnimationEnd', 'mozAnimationEnd',
+      'MSAnimationEnd', 'oanimationend',
+      'animationend', 'webkitTransitionEnd',
+      'otransitionend', 'transitionend'
+    ];
+
+    service.animate = animate;
+    service.toggleAnimation = toggleAnimation;
+
+    return service;
+
+    function toggleAnimation(element, futureState) {
+      if(futureState) {
+        element.addClass(activeGenericClass);
+      } else {
+        element.removeClass(activeGenericClass);
+      }
+    }
+
+    function animate(element, futureState, animationIn, animationOut) {
+      var animationTimeout;
+      var deferred = $q.defer();
+      var timedOut = true;
+      var self = this;
+      self.cancelAnimation = cancelAnimation;
+
+      var animationClass = futureState ? animationIn: animationOut;
+      var activation = futureState;
+      var initClass = activation ? initClasses[0] : initClasses[1];
+      var activeClass = activation ? activeClasses[0] : activeClasses[1];
+
+      run();
+      return deferred.promise;
+
+      function run() {
+        //stop animation
+        registerElement(element);
+        reset();
+        element.addClass(animationClass);
+        element.addClass(initClass);
+
+        element.addClass(activeGenericClass);
+
+        //force a "tick"
+        reflow();
+
+        //activate
+        element[0].style.transitionDuration = '';
+        element.addClass(activeClass);
+
+        element.on(events.join(' '), eventHandler);
+
+        animationTimeout = setTimeout(function() {
+          if(timedOut) {
+            finishAnimation();
+          }
+        }, 3000);
+      }
+
+      function eventHandler(e) {
+        if (element[0] === e.target) {
+          clearTimeout(animationTimeout);
+          finishAnimation();
+        }
+      }
+
+      function finishAnimation() {
+        deregisterElement(element);
+        reset(); //reset all classes
+        element[0].style.transitionDuration = '';
+        element.removeClass(!activation ? activeGenericClass : ''); //if not active, remove active class
+        reflow();
+        timedOut = false;
+        element.off(events.join(' '), eventHandler);
+        deferred.resolve({element: element, active: activation});
+      }
+
+      function cancelAnimation(element) {
+        deregisterElement(element);
+        angular.element(element).off(events.join(' ')); //kill all animation event handlers
+        timedOut = false;
+        deferred.reject();
+      }
+
+      function registerElement(el) {
+        var elObj = {
+          el: el,
+          animation: self
+        };
+
+        //kill in progress animations
+        var inProgress = animations.filter(function(obj) {
+          return obj.el === el;
+        });
+        if(inProgress.length > 0) {
+          var target = inProgress[0].el[0];
+
+          inProgress[0].animation.cancelAnimation(target);
+        }
+
+        animations.push(elObj);
+      }
+
+      function deregisterElement(el) {
+        var index;
+        var currentAnimation = animations.filter(function(obj, ind) {
+          if(obj.el === el) {
+            index = ind;
+          }
+        });
+
+        if(index >= 0) {
+          animations.splice(index, 1);
+        }
+
+      }
+
+      function reflow() {
+        return element[0].offsetWidth;
+      }
+
+      function reset() {
+        element[0].style.transitionDuration = 0;
+        element.removeClass(initClasses.join(' ') + ' ' + activeClasses.join(' ') + ' ' + animationIn + ' ' + animationOut);
+      }
+    }
+  }
+
+})();
+
+(function() {
+  'use strict';
+
   angular.module('foundation.accordion', [])
     .controller('ZfAccordionController', zfAccordionController)
     .directive('zfAccordion', zfAccordion)
@@ -49073,6 +49408,318 @@ angular.module('ui.router.state')
         controller.select(scope);
       };
 
+    }
+  }
+
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('foundation.tabs', ['foundation.core'])
+    .controller('ZfTabsController', ZfTabsController)
+    .directive('zfTabs', zfTabs)
+    .directive('zfTabContent', zfTabContent)
+    .directive('zfTab', zfTab)
+    .directive('zfTabIndividual', zfTabIndividual)
+    .directive('zfTabHref', zfTabHref)
+    .directive('zfTabCustom', zfTabCustom)
+    .directive('zfTabContentCustom', zfTabContentCustom)
+    .service('FoundationTabs', FoundationTabs)
+  ;
+
+  FoundationTabs.$inject = ['FoundationApi'];
+
+  function FoundationTabs(foundationApi) {
+    var service    = {};
+
+    service.activate = activate;
+
+    return service;
+
+    //target should be element ID
+    function activate(target) {
+      foundationApi.publish(target, 'show');
+    }
+
+  }
+
+  ZfTabsController.$inject = ['$scope', 'FoundationApi'];
+
+  function ZfTabsController($scope, foundationApi) {
+    var controller = this;
+    var tabs       = controller.tabs = $scope.tabs = [];
+    var id         = '';
+
+    controller.select = function(selectTab) {
+      tabs.forEach(function(tab) {
+        tab.active = false;
+        tab.scope.active = false;
+
+        if(tab.scope === selectTab) {
+          foundationApi.publish(id, ['activate', tab]);
+
+          tab.active = true;
+          tab.scope.active = true;
+        }
+      });
+
+    };
+
+    controller.addTab = function addTab(tabScope) {
+      tabs.push({ scope: tabScope, active: false, parentContent: controller.id });
+
+      if(tabs.length === 1) {
+        tabs[0].active = true;
+        tabScope.active = true;
+      }
+    };
+
+    controller.getId = function() {
+      return id;
+    };
+
+    controller.setId = function(newId) {
+      id = newId;
+    };
+  }
+
+  zfTabs.$inject = ['FoundationApi'];
+
+  function zfTabs(foundationApi) {
+    var directive = {
+      restrict: 'EA',
+      transclude: 'true',
+      replace: true,
+      templateUrl: 'components/tabs/tabs.html',
+      controller: 'ZfTabsController',
+      scope: {
+        displaced: '@?'
+      },
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element, attrs, controller) {
+      scope.id = attrs.id || foundationApi.generateUuid();
+      scope.showTabContent = scope.displaced !== 'true';
+      attrs.$set('id', scope.id);
+      controller.setId(scope.id);
+
+      //update tabs in case tab-content doesn't have them
+      var updateTabs = function() {
+        foundationApi.publish(scope.id + '-tabs', scope.tabs);
+      };
+
+      foundationApi.subscribe(scope.id + '-get-tabs', function() {
+        updateTabs();
+      });
+    }
+  }
+
+  zfTabContent.$inject = ['FoundationApi'];
+
+  function zfTabContent(foundationApi) {
+    var directive = {
+      restrict: 'A',
+      transclude: 'true',
+      replace: true,
+      scope: {
+        tabs: '=?',
+        target: '@'
+      },
+      templateUrl: 'components/tabs/tab-content.html',
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element, attrs, ctrl) {
+      scope.tabs = scope.tabs || [];
+      var id = scope.target;
+
+      foundationApi.subscribe(id, function(msg) {
+        if(msg[0] === 'activate') {
+          var tabId = msg[1];
+          scope.tabs.forEach(function (tab) {
+            tab.scope.active = false;
+            tab.active = false;
+
+            if(tab.scope.id === id) {
+              tab.scope.active = true;
+              tab.active = true;
+            }
+          });
+        }
+      });
+
+      //if tabs empty, request tabs
+      if(scope.tabs.length === 0) {
+        foundationApi.subscribe(id + '-tabs', function(tabs) {
+          scope.tabs = tabs;
+        });
+
+        foundationApi.publish(id + '-get-tabs', '');
+      }
+    }
+  }
+
+  zfTab.$inject = ['FoundationApi'];
+
+  function zfTab(foundationApi) {
+    var directive = {
+      restrict: 'EA',
+      templateUrl: 'components/tabs/tab.html',
+      transclude: true,
+      scope: {
+        title: '@'
+      },
+      require: '^zfTabs',
+      replace: true,
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element, attrs, controller, transclude) {
+      scope.id = attrs.id || foundationApi.generateUuid();
+      scope.active = false;
+      scope.transcludeFn = transclude;
+      controller.addTab(scope);
+
+      foundationApi.subscribe(scope.id, function(msg) {
+        if(msg === 'show' || msg === 'open' || msg === 'activate') {
+          scope.makeActive();
+        }
+      });
+
+      scope.makeActive = function() {
+        controller.select(scope);
+      };
+    }
+  }
+
+  zfTabIndividual.$inject = ['FoundationApi'];
+
+  function zfTabIndividual(foundationApi) {
+    var directive = {
+      restrict: 'EA',
+      transclude: 'true',
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element, attrs, ctrl, transclude) {
+      var tab = scope.$eval(attrs.tab);
+      var id = tab.scope.id;
+
+      tab.scope.transcludeFn(tab.scope, function(tabContent) {
+        element.append(tabContent);
+      });
+
+      foundationApi.subscribe(tab.scope.id, function(msg) {
+        foundationApi.publish(tab.parentContent, ['activate', tab.scope.id]);
+        scope.$apply();
+      });
+
+    }
+  }
+
+  //custom tabs
+
+  zfTabHref.$inject = ['FoundationApi'];
+
+  function zfTabHref(foundationApi) {
+    var directive = {
+      restrict: 'A',
+      replace: false,
+      link: link
+    }
+
+    return directive;
+
+    function link(scope, element, attrs, ctrl) {
+      var target = attrs.zfTabHref;
+
+      foundationApi.subscribe(target, function(msg) {
+        if(msg === 'activate' || msg === 'show' || msg === 'open') {
+          makeActive();
+        }
+      });
+
+
+      element.on('click', function(e) {
+        foundationApi.publish(target, 'activate');
+        makeActive();
+        e.preventDefault();
+      });
+
+      function makeActive() {
+        element.parent().children().removeClass('is-active');
+        element.addClass('is-active');
+      }
+    }
+  }
+
+  zfTabCustom.$inject = ['FoundationApi'];
+
+  function zfTabCustom(foundationApi) {
+    var directive = {
+      restrict: 'A',
+      replace: false,
+      link: link
+    };
+
+    return directive;
+
+    function link(scope, element, attrs, ctrl, transclude) {
+      var children = element.children();
+      angular.element(children[0]).addClass('is-active');
+    }
+  }
+
+  zfTabContentCustom.$inject = ['FoundationApi'];
+
+  function zfTabContentCustom(foundationApi) {
+    return {
+      restrict: 'A',
+      link: link
+    };
+
+    function link(scope, element, attrs) {
+      var tabs = [];
+      var children = element.children();
+
+      angular.forEach(children, function(node) {
+        if(node.id) {
+          var tabId = node.id;
+          tabs.push(tabId);
+          foundationApi.subscribe(tabId, function(msg) {
+            if(msg === 'activate' || msg === 'show' || msg === 'open') {
+              activateTabs(tabId);
+            }
+          });
+
+          if(tabs.length === 1) {
+            var el = angular.element(node);
+            el.addClass('is-active');
+          }
+        }
+      });
+
+      function activateTabs(tabId) {
+        var tabNodes = element.children();
+        angular.forEach(tabNodes, function(node) {
+          var el = angular.element(node);
+          el.removeClass('is-active');
+          if(el.attr('id') === tabId) {
+            el.addClass('is-active');
+          }
+
+        });
+      }
     }
   }
 
@@ -49277,7 +49924,10 @@ $( document ).ready(function() {
 var appRadio = angular.module('appRadio', [
 	'ui.router',
 	'ngAnimate',
-	'foundation.accordion'
+	'foundation.core',
+	'foundation.core.animation',	
+	'foundation.accordion',
+	'foundation.tabs'
 	// 'foundation.dynamicRouting.animations'
 ])
 	.config(config)

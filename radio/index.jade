@@ -10,36 +10,33 @@ html
 	body(ng-app='appRadio')
 
 		//- HEADER
-		.grid-frame.vertical
-			#container(ng-controller='PlayerCtrl')
-				include ../templates/layouts/header
+		.grid-frame.vertical(ng-controller='PlayerCtrl')
+			include ../templates/layouts/header
 
-				
+			
+			.grid-block
 				.grid-block
-					.grid-block
-						a.dark.expand.button(ng-click='play(currentSong.url)') Play
-					.grid-block
-						a.dark.expand.button(ng-click='pause()') Pause
+					a.dark.expand.button(ng-click='play(currentSong.url)') Play
+				.grid-block
+					a.dark.expand.button(ng-click='pause()') Pause
 
-				.grid-block.medium-4
-					zf-accordion#days.days
-						zf-accordion-item.day(ng-repeat='day in showDays track by $index')
-							span {{day.text}}
-							ul.shows
-								li.show(ng-repeat='show in day.shows track by $index')
-									span {{show.name}}
-									ul.songs
-										li.song(ng-repeat='song in show.songs track by $index')
-											span(ng-click='setCurrentSong(song)') {{song.text}}
+			.grid-block.medium-4
+				zf-accordion#days.days.grid-block.vertical(auto-open="false")
+					zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
+						zf-accordion.shows(auto-open="false")
+							zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
+								ul.songs.unstyled
+									li.song(ng-repeat='song in show.songs track by $index')
+										span.button.expand.dark(ng-click='setCurrentSong(song)') {{song.text}}
 
-				//- The content block should contain the body of your template's content
-				.grid-block.medium-4
-					h2 test
+			//- The content block should contain the body of your template's content
+			.grid-block.medium-8
+				h2 test
 
 
-				//- FOOTER
-				include ../templates/layouts/footer
+			//- FOOTER
+			include ../templates/layouts/footer
 
 
-				//- //- JAVASCRIPT
-				include ../templates/layouts/footer-scripts
+			//- //- JAVASCRIPT
+			include ../templates/layouts/footer-scripts

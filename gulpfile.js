@@ -29,7 +29,10 @@ var paths = {
 				'./bower_components/angular-animate/angular-animate.js',
 				'./bower_components/angular-ui-router/release/angular-ui-router.js',
 				'./bower_components/fastclick/lib/fastclick.js',
+				'./node_modules/foundation-apps/js/angular/services/foundation.core.js',
+				'./node_modules/foundation-apps/js/angular/services/foundation.core.animation.js',
 				'./node_modules/foundation-apps/js/angular/components/accordion/accordion.js',
+				'./node_modules/foundation-apps/js/angular/components/tabs/tabs.js',
 				'./radio/js/custom/yql.js',
 				'./radio/js/custom/parse-bassdrive.js',
 				'./radio/js/custom/app.js'
