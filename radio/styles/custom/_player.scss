@@ -1,7 +1,7 @@
 .player-wrapper{
 
 	.card img{
-		background-color: $dark; 
+		background-color: $dark-color; 
 	}	
 }
 
@@ -11,4 +11,10 @@
 	text-align: center;
 	background-color: $primary-color;
 	color: $white;	
+}
+
+.track-url{
+	span{
+		margin-right: 1rem; 
+	}
 }

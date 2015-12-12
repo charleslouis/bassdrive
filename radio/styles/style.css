@@ -5504,12 +5504,17 @@ blockquote p {
 .show > .accordion-content {
   padding: 0; }
 
-.show .button {
-  margin-bottom: 0.15rem; }
-
 .songs {
-  margin-left: 0; }
+  margin: 0; }
+
+.player-wrapper .card img {
+  background-color: #32384D; }
 
 .player-title {
+  width: 100%;
   text-align: center;
-  color: #32384D; }
+  background-color: #1CA9D7;
+  color: #FFF; }
+
+.track-url span {
+  margin-left: 1rem; }
