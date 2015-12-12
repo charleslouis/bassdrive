@@ -60,10 +60,18 @@ html
 											span.button.expand.primary(ng-click='setCurrentSong(song)') {{song.text}}
 
 				//- The content block should contain the body of your template's content
-				.grid-block.medium-8.small-12.vertical
+				.grid-block.medium-8.small-12.vertical.player-wrapper
 					.title-bar.primary
-						span.center.title {{currentSong.text}}
-					div			
+						br
+						//- span.center.title {{currentSong.text}}
+					div.card						
+						img(src="img/bassdrive-logo.svg", alt="")						
+						.divider {{currentSong.text}}
+						.card-section
+							h2 {{currentSong.show}}
+							h2 {{currentSong.date}}
+							h2 {{currentSong.name}}
+							a.label {{currentSong.url}}
 
 			//- FOOTER
 			include ../templates/layouts/footer
