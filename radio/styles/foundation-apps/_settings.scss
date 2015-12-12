@@ -90,7 +90,7 @@
 // $font-weight-bold: bold;
 
 // We use these to control various global styles
-// $body-background: #fff;
+$body-background: smartscale(#A3D6EE, -70%);
 // $body-font-color: #222;
 // $body-font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
 // $body-font-weight: $font-weight-normal;
@@ -98,16 +98,19 @@
 // $body-antialiased: true;
 
 // Application Colors
-// $primary-color: #00558b;
-// $secondary-color: #f1f1f1;
+$primary-color: #1CA9D7;
+$secondary-color: #A3D6EE;
 // $alert-color: #F04124;
 // $info-color: #A0D3E8;
 // $success-color: #43AC6A;
 // $warning-color: #F08A24;
-// $dark-color: #232323;
+ $dark-color: #32384D;
 // $gray: #dfdfdf;
 // $gray-dark: darken($gray, 8);
 // $gray-light: lighten($gray, 8);
+$white: #FFF;
+
+//
 
 // We use these to make sure border radius matches unless we want it different.
 // $global-radius: 4px;
@@ -263,10 +266,10 @@
 
 // $accordion-border: 1px solid $gray-dark;
 
-// $accordion-title-background: $gray-light;
-// $accordion-title-background-hover: smartscale($accordion-title-background, 5%);
+$accordion-title-background: $primary-color;
+$accordion-title-background-hover: smartscale($accordion-title-background, 5%);
 // $accordion-title-background-active: smartscale($accordion-title-background, 3%);
-// $accordion-title-color: isitlight($accordion-title-background);
+$accordion-title-color: isitlight($accordion-title-background);
 // $accordion-title-color-active: isitlight($accordion-title-background);
 
 // $accordion-title-padding: $global-padding;
@@ -293,12 +296,12 @@
 // 9. Block List
 // - - - - - - - - - - - - - - -
 
-// $blocklist-background: #fff;
+// $blocklist-background: #FFF;
 // $blocklist-fullbleed: true;
 // $blocklist-fontsize: 1rem;
 
 // $blocklist-item-padding: 0.8rem 1rem;
-// $blocklist-item-color: isitlight($blocklist-background, #000, #fff);
+// $blocklist-item-color: isitlight($blocklist-background, #000, #FFF);
 // $blocklist-item-background-hover: smartscale($blocklist-background, 4.5%);
 // $blocklist-item-color-disabled: #999;
 // $blocklist-item-border: 1px solid smartscale($blocklist-background, 18.5%);
@@ -316,13 +319,13 @@
 // - - - - - - - - - - - - - - -
 
 // $btngroup-background: $primary-color;
-// $btngroup-color: #fff;
+// $btngroup-color: #FFF;
 // $btngroup-radius: $button-radius; 
 
 // 11. Card
 // - - - - - - - - - - - - - - -
 
-// $card-background: #fff;
+// $card-background: #FFF;
 // $card-color: isitlight($card-background);
 // $card-border: 1px solid smartscale($card-background, 7%);
 // $card-radius: $global-radius;
@@ -355,7 +358,7 @@
 // $input-color: #000;
 // $input-color-hover: $input-color;
 // $input-color-focus: $input-color;
-// $input-background: #fff;
+// $input-background: #FFF;
 // $input-background-hover: $input-background;
 // $input-background-focus: $input-background;
 // $input-background-disabled: smartscale($input-background);
@@ -418,13 +421,13 @@
 // $badge-fontsize: 0.8em;
 // $badge-diameter: 1.5rem;
 // $badge-background: $primary-color;
-// $badge-color: #fff; 
+// $badge-color: #FFF; 
 
 // 16. Menu Bar
 // - - - - - - - - - - - - - - -
 
 // $menubar-fontsize: 1rem;
-// $menubar-background: #fff;
+// $menubar-background: #FFF;
 // $menubar-background-hover: smartscale($menubar-background, 7%);
 // $menubar-background-active: $menubar-background-hover;
 // $menubar-color: isitlight($menubar-background);
@@ -438,7 +441,7 @@
 // 17. Modal
 // - - - - - - - - - - - - - - -
 
-// $modal-background: #fff;
+// $modal-background: #FFF;
 // $modal-border: 0;
 // $modal-radius: 0px;
 // $modal-shadow: none;
@@ -539,7 +542,7 @@
 // $offcanvas-size-horizontal: 250px;
 // $offcanvas-size-vertical: 250px;
 
-// $offcanvas-background: #fff;
+// $offcanvas-background: #FFF;
 // $offcanvas-color: isitlight($offcanvas-background);
 // $offcanvas-padding: 0;
 // $offcanvas-shadow: 3px 0 10px rgba(black, 0.25);
@@ -554,7 +557,7 @@
 // $panel-size-vertical: 300px;
 // $panel-padding: 0;
 
-// $panel-background: #fff;
+// $panel-background: #FFF;
 // $panel-shadow: 3px 0 10px rgba(black, 0.25);
 
 // DEPRECATED: these variables will be removed in a future version.
@@ -564,7 +567,7 @@
 // - - - - - - - - - - - - - - -
 
 // $popup-width: rem-calc(300);
-// $popup-background: #fff;
+// $popup-background: #FFF;
 // $popup-border: 0;
 // $popup-radius: 0;
 // $popup-shadow: 0 0 10px rgba(#000, 0.25); 

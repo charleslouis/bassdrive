@@ -1,0 +1,46 @@
+.archives-title{
+	color: $white; 
+	padding-left: 1rem; 
+}
+
+.days, .shows {
+	border: none;
+	background-color: smartscale($accordion-title-background, -10%);
+}
+
+.days{
+	>.accordion-content{
+		padding: 0; 
+	}
+}
+
+.shows{
+	
+}
+
+.show{
+	.accordion-title{
+		background-color: smartscale($accordion-title-background, -10%);
+		&:hover{
+			background-color: smartscale($accordion-title-background, 0);
+		}
+	}
+	&.accordion-item.is-active{
+		
+		background-color: smartscale($accordion-title-background, 5%);
+		
+		.accordion-title{
+			background-color: smartscale($accordion-title-background, 5%);			
+		}
+	}
+	>.accordion-content{
+		padding: 0; 
+	}
+	.button{
+		margin-bottom: 0.15rem; 
+	}
+}
+
+.songs{
+	margin-left: 0; 
+}

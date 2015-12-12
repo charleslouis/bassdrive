@@ -17,11 +17,28 @@ html
 			.menu-group.dark
 				.menu-group-left
 					ul.menu-bar
-				.menu-group-right
-					ul.menu-bar
 						li
 							a(ng-click='play(currentSong.url)', title='Play Radio')
-								img.iconic-color-primary(zf-iconic='', icon='musical-note', size='medium', class='iconic-color-secondary')
+								img.iconic-color-primary(zf-iconic='', icon='musical-note', size='small', class='iconic-color-secondary')
+								| Live radio
+						li
+							a(href="http://www.bassdrive.com/v2/streams/BassDrive3.pls", target='_blank')
+								img.iconic-color-primary(zf-iconic='', icon='', size='small')
+								| AAC
+						li
+							a(href="http://www.bassdrive.com/BassDrive.asx", target='_blank')
+								img.iconic-color-primary(zf-iconic='', icon='', size='small')
+								| WMA
+						li
+							a(href="http://www.bassdrive.com/v2/streams/BassDrive6.pls", target='_blank')
+								img.iconic-color-primary(zf-iconic='', icon='', size='small')
+								| 56K
+						li
+							a(href="http://www.bassdrive.com/v2/streams/BassDrive.pls", target='_blank')
+								img.iconic-color-primary(zf-iconic='', icon='', size='small')
+								| 128K																					
+				.menu-group-right
+					ul.menu-bar
 						li
 							a(ng-click='play(currentSong.url)')
 								img.iconic-color-primary(zf-iconic='', icon='media', size='medium', class='iconic-color-secondary', data-state='play')
@@ -30,20 +47,23 @@ html
 								img.iconic-color-primary(zf-iconic='', icon='media', size='medium', class='iconic-color-secondary', data-state='pause')
 										
 			.grid-block
-
-				//- The content block should contain the body of your template's content
-				.grid-block.medium-8.small-12
-					h2 {{currentSong.text}}
 				
-				.grid-block.medium-4.small-12
+				.grid-block.medium-4.small-12.vertical
+					.title-bar.primary
+						span.left.title  Archives
 					zf-accordion#days.days.grid-block.vertical(auto-open="false")
 						zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
 							zf-accordion.shows(auto-open="false")
 								zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
 									ul.songs.unstyled
 										li.song(ng-repeat='song in show.songs track by $index')
-											span.button.expand.dark(ng-click='setCurrentSong(song)') {{song.text}}
+											span.button.expand.primary(ng-click='setCurrentSong(song)') {{song.text}}
 
+				//- The content block should contain the body of your template's content
+				.grid-block.medium-8.small-12.vertical
+					.title-bar.primary
+						span.center.title {{currentSong.text}}
+					div			
 
 			//- FOOTER
 			include ../templates/layouts/footer
