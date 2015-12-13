@@ -40,8 +40,10 @@ html
 						.menu-group-right
 							ul.primary.menu-bar
 								li.right
-									a(ng-click='play(currentSong.url)')
+									a(ng-click='pause()', ng-show='isPlaying')
 										img.icon-only(zf-iconic='', icon='media', size='small', class='iconic-color-secondary', data-state='pause')
+									a(ng-click='play(currentSong.url)', ng-show='!isPlaying')
+										img.icon-only(zf-iconic='', icon='media', size='small', class='iconic-color-secondary', data-state='play')
 								li.right
 									a(ng-click='pause()')
 										img.icon-only(zf-iconic='', icon='volume', size='small', class='iconic-color-secondary', data-state='high')

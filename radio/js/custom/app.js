@@ -62,11 +62,12 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 
 	$scope.pause = function() {
 		audio.pause();
+		$scope.isPlaying = false;
+
+		console.log('isPlaying = ' + $scope.mediaStatePlay);
 	} 
 	
 	$scope.play = function() {
-		
-		console.log('play');
 		
 		if($scope.currentSong){
 			audio.play($scope.currentSong.url);
@@ -76,6 +77,10 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 			$scope.playerTimer = 0;
 			$scope.$apply();		
 		}
+
+		$scope.isPlaying = true;
+
+		console.log('isPlaying = ' + $scope.isPlaying);
 	}   
    
 });
