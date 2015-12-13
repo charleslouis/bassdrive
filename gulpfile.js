@@ -34,6 +34,8 @@ var paths = {
 				'./radio/components/iconic/iconic.js',
 				'./node_modules/foundation-apps/js/angular/services/foundation.core.animation.js',
 				'./node_modules/foundation-apps/js/angular/components/accordion/accordion.js',
+				'./node_modules/foundation-apps/js/angular/components/common/common.js',
+				'./node_modules/foundation-apps/js/angular/components/popup/popup.js',
 				'./node_modules/foundation-apps/js/angular/components/tabs/tabs.js',
 				'./radio/js/custom/yql.js',
 				'./radio/js/custom/parse-bassdrive.js',

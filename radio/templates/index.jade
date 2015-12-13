@@ -37,17 +37,23 @@ html
 										img(zf-iconic='', icon='musical-note', size='small', class='iconic-color-secondary')
 										| Live Radio
 						span.timer {{playerTimer | date : format : h:mm:ss}}
+						
+						
 						.menu-group-right
 							ul.primary.menu-bar
+						
 								li.right
-									a(ng-click='pause()', ng-show='isPlaying')
-										img.icon-only(zf-iconic='', icon='media', size='small', class='iconic-color-secondary', data-state='pause')
-									a(ng-click='play(currentSong.url)', ng-show='!isPlaying')
-										img.icon-only(zf-iconic='', icon='media', size='small', class='iconic-color-secondary', data-state='play')
+									a(ng-click='pause()', ng-show='isPlaying').icon-only
+										img(zf-iconic='', icon='media', size='small', data-state='pause')
+									a(ng-click='play(currentSong.url)', ng-show='!isPlaying').icon-only
+										img(zf-iconic='', icon='media', size='small', data-state='play')
+						
 								li.right
-									a(ng-click='pause()')
-										img.icon-only(zf-iconic='', icon='volume', size='small', class='iconic-color-secondary', data-state='high')
-					
+									a(ng-click='pause()', zf-popup-toggle='popup').icon-only
+										img(zf-iconic='', icon='volume', size='small', data-state='high')
+									zf-popup#popup
+										//- meter(min='0' max='100' low='25' high='75' optimum='100' value='10')
+
 					div.card
 						img(src="img/bassdrive-logo.svg", alt="")
 						.divider

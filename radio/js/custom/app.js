@@ -7,7 +7,8 @@ var appRadio = angular.module('appRadio', [
 	'foundation.core.animation',	
 	'foundation.accordion',
 	'foundation.tabs',
-    'foundation.iconic'
+    'foundation.iconic',
+    'foundation.popup'
 	// 'foundation.dynamicRouting.animations'
 ])
 	.config(config)
@@ -35,20 +36,42 @@ var appRadio = angular.module('appRadio', [
 
 appRadio.controller('PlayerCtrl', function ($scope, audio){
 	
+	// Get shows and songs from local storage
 	var showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
+	$scope.showDays = showDaysJSON;
+
+	// Current song is empty for now
 	$scope.currentSong = {};
+
+	// Since were opening for the first time,
+	// user has not chose a track
+	// so let's play the radio
+	var radio = true;
 	$scope.currentSong.text = 'Live Radio';
 	$scope.currentSong.url = 'http://shouthost.com.80-1.streams.bassdrive.com:80/;stream.mp3&12762816470';
-	var radio = true;
-	
-	audio.play( $scope.currentSong.url );
 	$scope.playerTimer = '00:00:00';
-	$scope.showDays = showDaysJSON;
+
+
+
+	// If the volume was already set, get it from localStorage
+	// Else, we set it
+	if (localStorage.getItem('volume')){
+		$scope.volume = localStorage.getItem('volume');
+	} else {
+		var volume = 0.5;
+		$scope.volume = volume;
+		localStorage.setItem('volume', volume);
+	}
+
+
+	// Now let's play the music
+	audio.play( $scope.currentSong.url, $scope.volume);
+
 
 	setTimeout(function(){
 		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
 		$scope.showDays = showDaysJSON;
-		$scope.$apply();
+		// $scope.$apply();
 	}, 5000);  
 	
 	$scope.setCurrentSong = function(song){
@@ -57,7 +80,6 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 		audio.play(song.url);
 		radio = false;
 		$scope.playerTimer = '50:00:00';
-		$scope.$apply();
 	}
 
 	$scope.pause = function() {
@@ -69,13 +91,13 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 	
 	$scope.play = function() {
 		
+		console.log('$scope.volume = ' + $scope.volume);
+
 		if($scope.currentSong){
-			audio.play($scope.currentSong.url);
+			audio.play($scope.currentSong.url, $scope.volume);
 		} else {
-			console.log('play 3');
-			audio.play('http://shouthost.com.80-1.streams.bassdrive.com:80/;stream.mp3&12762816470');
+			audio.play('http://shouthost.com.80-1.streams.bassdrive.com:80/;stream.mp3&12762816470', $scope.volume);
 			$scope.playerTimer = 0;
-			$scope.$apply();		
 		}
 
 		$scope.isPlaying = true;
@@ -93,10 +115,12 @@ appRadio.factory('audio',function ($document) {
 	return {
 		audioElement: audioElement,
 
-		play: function(filename) {
+		play: function(filename, volume) {
 			
+			console.log('Volume : ' + volume);
+
 			audioElement.src = filename;
-			audioElement.volume = 0.5;
+			audioElement.volume = volume;
 			console.log( audioElement.src );
 			
 	/*        if( trackPos!=null && trackVol!=null ){
@@ -113,6 +137,8 @@ appRadio.factory('audio',function ($document) {
 			audioElement.volume = 0;      
 			trackPos = audioElement.currentTime;
 			trackVol = audioElement.volume;
+					console.log(trackVol);
+					console.log(trackPos);
 		}
 	}
 });

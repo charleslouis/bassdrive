@@ -8,9 +8,12 @@
 		padding: 0.6rem; 
 	}
 
-	.menu-bar > li > a > .iconic.icon-only{
+	.menu-bar > li > a.icon-only > .iconic{
 		margin: 0;
 	}
+	// .menu-bar > li > a.icon-only{
+	// 	padding-bottom: 0;  
+	// }
 }
 
 
