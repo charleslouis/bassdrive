@@ -2,7 +2,15 @@
 
 	.card img{
 		background-color: $dark-color; 
-	}	
+	}
+
+	.title-bar{
+		padding: 0.6rem; 
+	}
+
+	.menu-bar > li > a > .iconic.icon-only{
+		margin: 0;
+	}
 }
 
 
@@ -17,4 +25,8 @@
 	span{
 		margin-right: 1rem; 
 	}
+}
+
+.timer{
+	color: $white; 
 }

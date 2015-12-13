@@ -1,0 +1,66 @@
+doctype html
+html
+
+	//- HTML HEADER
+	head
+		include ../templates/layouts/head
+
+
+	//- HTML BODY
+	body(ng-app='appRadio')
+
+		//- HEADER
+		.grid-frame.vertical(ng-controller='PlayerCtrl')
+			include ../templates/layouts/header
+
+		
+			.grid-block
+				
+				.grid-block.medium-4.small-12.vertical
+					.title-bar.primary
+						span.left.title  Archives
+					zf-accordion#days.days.grid-block.vertical(auto-open="false")
+						zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
+							zf-accordion.shows(auto-open="false")
+								zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
+									ul.block-list.songs
+										li.song.with-chevron(ng-repeat='song in show.songs track by $index')
+											span(ng-click='setCurrentSong(song)') {{song.text}}
+
+				//- The content block should contain the body of your template's content
+				.grid-block.medium-8.small-12.vertical.player-wrapper
+					.menu-group.dark
+						.menu-group-left
+							ul.icon-left.menu-bar
+								li
+									a(ng-click='play(currentSong.url)', title='Play Radio')
+										img(zf-iconic='', icon='musical-note', size='small', class='iconic-color-secondary')
+										| Live Radio
+						span.timer {{playerTimer | date : format : h:mm:ss}}
+						.menu-group-right
+							ul.primary.menu-bar
+								li.right
+									a(ng-click='play(currentSong.url)')
+										img.icon-only(zf-iconic='', icon='media', size='small', class='iconic-color-secondary', data-state='pause')
+								li.right
+									a(ng-click='pause()')
+										img.icon-only(zf-iconic='', icon='volume', size='small', class='iconic-color-secondary', data-state='high')
+					
+					div.card
+						img(src="img/bassdrive-logo.svg", alt="")
+						.divider
+							h1.text-center {{currentSong.text}}
+						.card-section
+							h2 {{currentSong.show}}
+							h2 {{currentSong.date}}
+							h2 {{currentSong.name}}
+							a.small.button.expand.track-url(href='{{currentSong.url}}', target='_blank')
+								span {{currentSong.url}}
+								img.iconic-color-primary(zf-iconic='', icon='external-link', size='small', class='iconic-color-secondary')
+
+			//- FOOTER
+			include ../templates/layouts/footer
+
+
+			//- //- JAVASCRIPT
+			include ../templates/layouts/footer-scripts

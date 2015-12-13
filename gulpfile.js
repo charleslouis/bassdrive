@@ -51,7 +51,10 @@ var paths = {
 		output: './radio/styles/'
 	},
 	'jadeFiles': {
-		templates: './radio/*.jade'
+		templates: [
+			'./radio/templates/*.jade',
+			'./radio/templates/**/*.jade'
+		]
 	},
 	'html': {
 		distFolder: './radio/',

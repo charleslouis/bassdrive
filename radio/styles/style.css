@@ -5510,6 +5510,12 @@ blockquote p {
 .player-wrapper .card img {
   background-color: #32384D; }
 
+.player-wrapper .title-bar {
+  padding: 0.6rem; }
+
+.player-wrapper .menu-bar > li > a > .iconic.icon-only {
+  margin: 0; }
+
 .player-title {
   width: 100%;
   text-align: center;
@@ -5517,4 +5523,7 @@ blockquote p {
   color: #FFF; }
 
 .track-url span {
-  margin-left: 1rem; }
+  margin-right: 1rem; }
+
+.timer {
+  color: #FFF; }
