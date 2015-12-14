@@ -49,10 +49,12 @@ html
 										img(zf-iconic='', icon='media', size='small', data-state='play')
 						
 								li.right
-									a(ng-click='pause()', zf-popup-toggle='popup').icon-only
+									a(zf-popup-toggle='popup-volume').icon-only
 										img(zf-iconic='', icon='volume', size='small', data-state='high')
-									zf-popup#popup
-										//- meter(min='0' max='100' low='25' high='75' optimum='100' value='10')
+									zf-popup#popup-volume(pin-to='top right', pin-at='bottom left')
+										img(zf-iconic='', icon='volume', size='small', data-state='low')
+										input(type='range')
+										meter(min='0' max='100' low='25' high='75' optimum='100' value='{{volume * 100}}')
 
 					div.card
 						img(src="img/bassdrive-logo.svg", alt="")

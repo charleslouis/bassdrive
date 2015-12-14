@@ -33,3 +33,15 @@
 .timer{
 	color: $white; 
 }
+
+#popup-volume{
+	@include popup(
+		$width: $popup-width, // Should be an absolute value like px or rem
+		$background: $popup-background, // Background color
+		$radius: $popup-radius, // Border radius
+		$shadow: $popup-shadow, // Box shadow
+		$border: $popup-border // Border
+	);
+	left: auto;
+	right: 0;  
+}

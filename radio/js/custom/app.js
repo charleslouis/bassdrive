@@ -66,6 +66,7 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 
 	// Now let's play the music
 	audio.play( $scope.currentSong.url, $scope.volume);
+	$scope.isPlaying = true;
 
 
 	setTimeout(function(){
@@ -103,7 +104,7 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 		$scope.isPlaying = true;
 
 		console.log('isPlaying = ' + $scope.isPlaying);
-	}   
+	}
    
 });
 

@@ -393,12 +393,12 @@ $accordion-title-color: isitlight($accordion-title-background);
 // $slider-thumb-radius: 0px;
 
 // Progress and meter
-// $meter-height: 1.5rem;
-// $meter-background: #ccc;
-// $meter-fill: $primary-color;
-// $meter-fill-high: $success-color;
-// $meter-fill-medium: #e7cf00;
-// $meter-fill-low: $alert-color;
+$meter-height: 0.1rem;
+$meter-background: $secondary-color;
+$meter-fill: $primary-color;
+$meter-fill-high: $primary-color;
+$meter-fill-medium: $primary-color;
+$meter-fill-low: $primary-color;
 // $meter-radius: 0; 
 
 // 14. Iconic

@@ -29,6 +29,7 @@ var paths = {
 				'./bower_components/angular-animate/angular-animate.js',
 				'./bower_components/angular-ui-router/release/angular-ui-router.js',
 				'./bower_components/fastclick/lib/fastclick.js',
+				'./bower_components/tether/dist/js/tether.js',
 				'./node_modules/foundation-apps/js/vendor/iconic.min.js',
 				'./node_modules/foundation-apps/js/angular/services/foundation.core.js',
 				'./radio/components/iconic/iconic.js',
