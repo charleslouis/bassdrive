@@ -1,11 +1,18 @@
 .archives-title{
 	color: $white; 
-	padding-left: 1rem; 
+	padding-left: 1rem;
+
 }
 
 .days, .shows {
 	border: none;
 	background-color: smartscale($accordion-title-background, -10%);
+	
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;		
 }
 
 .days{
@@ -14,8 +21,26 @@
 	}
 }
 
-.shows{
-	
+.days,
+.day,
+.shows,
+.show,
+.songs,
+.song {
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+
+	span{
+		-webkit-transition: all 0.2s ease-in-out;
+		-moz-transition: all 0.2s ease-in-out;
+		-ms-transition: all 0.2s ease-in-out;
+		-o-transition: all 0.2s ease-in-out;
+		transition: all 0.2s ease-in-out;
+	}	    
+
 }
 
 .show{
@@ -44,4 +69,39 @@
 
 .songs{
 	margin: 0; 
+}
+
+.block-list li.song{
+	border-color: $white;
+	font-size: 0.8rem; 
+	
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+	
+	span{
+		cursor: pointer;
+		color: $white;
+		line-height: 1.5;				
+
+		-webkit-transition: all 0.2s ease-in-out;
+		-moz-transition: all 0.2s ease-in-out;
+		-ms-transition: all 0.2s ease-in-out;
+		-o-transition: all 0.2s ease-in-out;
+		transition: all 0.2s ease-in-out;		
+
+	}
+
+	&:after{
+		color: $white; 
+	}
+
+	&:hover{
+		background-color: smartscale($accordion-title-background, 50%);
+		span{
+			color: smartscale($accordion-title-background, -50%);
+		}
+	}
 }

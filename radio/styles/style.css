@@ -5486,10 +5486,38 @@ blockquote p {
 
 .days, .shows {
   border: none;
-  background-color: #1998c2; }
+  background-color: #1998c2;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
 
 .days > .accordion-content {
   padding: 0; }
+
+.days,
+.day,
+.shows,
+.show,
+.songs,
+.song {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+  .days span,
+  .day span,
+  .shows span,
+  .show span,
+  .songs span,
+  .song span {
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out; }
 
 .show .accordion-title {
   background-color: #1998c2; }
@@ -5506,6 +5534,30 @@ blockquote p {
 
 .songs {
   margin: 0; }
+
+.block-list li.song {
+  border-color: #FFF;
+  font-size: 0.8rem;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; }
+  .block-list li.song span {
+    cursor: pointer;
+    color: #FFF;
+    line-height: 1.5;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out; }
+  .block-list li.song:after {
+    color: #FFF; }
+  .block-list li.song:hover {
+    background-color: #89d6f0; }
+    .block-list li.song:hover span {
+      color: #0e556c; }
 
 .player-wrapper .card img {
   background-color: #32384D; }
