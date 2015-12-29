@@ -5476,6 +5476,9 @@ blockquote p {
   -ms-overflow-x: visible;
   overflow-x: visible; }
 
+.center {
+  text-align: center; }
+
 .menu-bar {
   -ms-overflow-x: visible;
   overflow-x: visible; }
@@ -5558,6 +5561,10 @@ blockquote p {
     background-color: #89d6f0; }
     .block-list li.song:hover span {
       color: #0e556c; }
+  .block-list li.song.active {
+    background-color: #32384D; }
+    .block-list li.song.active span {
+      color: #e7f7fc; }
 
 .player-wrapper .card img {
   background-color: #32384D; }

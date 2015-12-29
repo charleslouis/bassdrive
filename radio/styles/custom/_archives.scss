@@ -101,7 +101,14 @@
 	&:hover{
 		background-color: smartscale($accordion-title-background, 50%);
 		span{
-			color: smartscale($accordion-title-background, -50%);
+			color: smartscale($accordion-title-background, -50%);		
+		}
+	}
+
+	&.active{
+		background-color: $dark-color;
+		span{			
+			color: smartscale($accordion-title-background, 90%);
 		}
 	}
 }

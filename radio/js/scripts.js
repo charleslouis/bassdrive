@@ -52161,6 +52161,9 @@ jQuery.ajax = (function(_ajax){
 //  Get the tracks of each shows on each day
 //
 //////////////////////////////////////////////
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
 
 $( document ).ready(function() {
 	var baseUrl = 'http://archives.bassdrivearchive.com';
@@ -52208,14 +52211,14 @@ $( document ).ready(function() {
 							  if (this.outerText.indexOf("-") > -1){
 								textComponents = this.outerText.split('-');    
 								show.artist = textComponents[1].trim().replace(/\/$/, "");
-								show.name = textComponents[0].trim().replace(/\/$/, "");                            
+								show.name = textComponents[0].trim().replace(/\/$/, "");
+
 							  } else {
 							  // use the same text for both DJ and Show
-								  textComponents = this.outerText;
-								  show.artist = textComponents.trim().replace(/\/$/, "");
-								  show.name = textComponents.trim().replace(/\/$/, "");
-								
-								//console.log('This show name can be split to get artist and show names separately:' + show.name);
+								textComponents = this.outerText;
+								show.artist = textComponents.trim().replace(/\/$/, "");
+								show.name = textComponents.trim().replace(/\/$/, "");
+
 							  }
 							
 							  show.pathname = $(this).attr("href");
@@ -52241,18 +52244,17 @@ $( document ).ready(function() {
 										  song.date = songText;
 										  song.text = songText;
 										  song.pathname = $(this).attr("href");
-										  song.url = show.url.replace(/\/$/, "/") +  $(this).attr("href");                                                                        
-										  songs.push(song);                                                                          
+										  song.url = show.url.replace(/\/$/, "/") +  $(this).attr("href");
+
+										  if(song.text != ' Parent Directory'){
+										  	songs.push(song);                                                                          
+										  }
+
 										}//endif                                   
 									  
 									  });//end each
 									  
-									  // console.log(songs[0].text);
-									  if(songs[0].text === ' Parent Directory'){
-										songs.shift();
-									  }
-									  
-									  show.songs = songs;                                
+									  show.songs = songs;                              
 									
 									}// end success
 							  }); //end ajax 
@@ -52351,11 +52353,13 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 	$scope.isPlaying = true;
 
 
+	$scope.loading = true;
 	setTimeout(function(){
 		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
 		$scope.showDays = showDaysJSON;
-		// $scope.$apply();
-	}, 5000);  
+		$scope.loading = false;
+		$scope.$apply();
+	}, 10000);
 	
 	$scope.setCurrentSong = function(song){
 		console.log(song);

@@ -19,12 +19,17 @@ html
 				.grid-block.medium-4.small-12.vertical
 					.title-bar.primary
 						span.left.title  Archives
-					zf-accordion#days.days.grid-block.vertical(auto-open="false")
+
+					div.center.panel(ng-show="loading")
+						img(zf-iconic='', icon='cogs', size='large', class='iconic-color-primary')
+						h3 We're fetching the bassdrive archives
+
+					zf-accordion#days.days.grid-block.vertical(auto-open="false", ng-hide="loading")
 						zf-accordion-item.day(title='{{day.text}}', ng-repeat='day in showDays track by $index')
 							zf-accordion.shows(auto-open="false")
 								zf-accordion-item.show(title='{{show.name}}', ng-repeat='show in day.shows track by $index')
 									ul.block-list.songs
-										li.song.with-chevron(ng-repeat='song in show.songs track by $index')
+										li.song.with-chevron(ng-repeat='song in show.songs track by $index', ng-class='{active : currentSong.url===song.url}')
 											span(ng-click='setCurrentSong(song)') {{song.text}}
 
 				//- The content block should contain the body of your template's content

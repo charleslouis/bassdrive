@@ -69,11 +69,13 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 	$scope.isPlaying = true;
 
 
+	$scope.loading = true;
 	setTimeout(function(){
 		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
 		$scope.showDays = showDaysJSON;
-		// $scope.$apply();
-	}, 5000);  
+		$scope.loading = false;
+		$scope.$apply();
+	}, 10000);
 	
 	$scope.setCurrentSong = function(song){
 		console.log(song);
