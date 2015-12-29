@@ -129,7 +129,8 @@ gulp.task('jadeHtml', function() {
 //-----------   SERVER   ---------------------
 gulp.task('server:start', function() {
   connect.server({
-    port: 8000
+    port: 8000,
+    root:'./radio'
   });
   // server close ?
 });
@@ -180,3 +181,9 @@ gulp.task('watch', [
 
 gulp.task('serve', ['server:start', 'watch'],function () {
 });
+
+gulp.task('build', [
+  'sass:build',
+  'jsconcat:build',
+  'jadeHtml'
+]);

@@ -52360,7 +52360,7 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 	$scope.setCurrentSong = function(song){
 		console.log(song);
 		$scope.currentSong = song;
-		audio.play(song.url);
+		audio.play(song.url, $scope.volume);
 		radio = false;
 		$scope.playerTimer = '50:00:00';
 	}
@@ -52403,7 +52403,6 @@ appRadio.factory('audio',function ($document) {
 			console.log('Volume : ' + volume);
 
 			audioElement.src = filename;
-			audioElement.volume = volume;
 			console.log( audioElement.src );
 			
 	/*        if( trackPos!=null && trackVol!=null ){
@@ -52414,6 +52413,7 @@ appRadio.factory('audio',function ($document) {
 			}*/
 			
 			audioElement.play();     //  <-- Thats all you need
+			audioElement.volume = volume;
 		},
 		pause: function(){
 			audioElement.pause();     //  <-- Thats all you need      
