@@ -14,9 +14,11 @@ var appRadio = angular.module('appRadio', [
 	.config(config)
 	.run(run);
 
-  config.$inject = ['$urlRouterProvider', '$locationProvider'];
 
-  function config($urlProvider, $locationProvider) {
+config.$inject = ['$urlRouterProvider', '$locationProvider'];
+
+
+function config($urlProvider, $locationProvider) {
 	$urlProvider.otherwise('/');
 
 	$locationProvider.html5Mode({
@@ -25,20 +27,24 @@ var appRadio = angular.module('appRadio', [
 	});
 
 	$locationProvider.hashPrefix('!');
-  }
-  
+}
 
-  function run() {
+
+function run() {
 	FastClick.attach(document.body);
-  }
-	
+}
 
 
-appRadio.controller('PlayerCtrl', function ($scope, audio){
+
+
+
+appRadio.controller('PlayerCtrl', function ($scope, $http, audio){
 	
 	// Get shows and songs from local storage
-	var showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
-	$scope.showDays = showDaysJSON;
+	// var showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
+	// $scope.showDays = showDaysJSON;
+
+
 
 	// Current song is empty for now
 	$scope.currentSong = {};
@@ -70,12 +76,24 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 
 
 	$scope.loading = true;
-	setTimeout(function(){
-		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
-		$scope.showDays = showDaysJSON;
-		$scope.loading = false;
-		$scope.$apply();
-	}, 10000);
+
+	$http.get('../resources/shows.json')
+		.then(function(data) {
+		    $scope.showDays = data.data;
+		    $scope.loading = false;
+		    console.log($scope.showDays);
+		}, function(data){
+			console.log(data);
+			console.log('error cant get JSON');
+		}
+	);
+
+	// setTimeout(function(){
+	// 	// showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
+	// 	// $scope.showDays = showDaysJSON;
+	// 	$scope.loading = false;
+	// 	$scope.$apply();
+	// }, 1000);
 	
 	$scope.setCurrentSong = function(song){
 		console.log(song);

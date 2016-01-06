@@ -5483,6 +5483,12 @@ blockquote p {
   -ms-overflow-x: visible;
   overflow-x: visible; }
 
+@media only screen and (min-width: 40em) {
+  .archives-wrapper {
+    -webkit-order: 1;
+    -ms-order: 1;
+    order: 1; } }
+
 .archives-title {
   color: #FFF;
   padding-left: 1rem; }
@@ -5565,6 +5571,12 @@ blockquote p {
     background-color: #32384D; }
     .block-list li.song.active span {
       color: #e7f7fc; }
+
+@media only screen and (min-width: 40em) {
+  .player-wrapper {
+    -webkit-order: 2;
+    -ms-order: 2;
+    order: 2; } }
 
 .player-wrapper .card img {
   background-color: #32384D; }

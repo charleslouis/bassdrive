@@ -52086,202 +52086,109 @@ return Tether;
 
 })();
 
-'use strict';
+(function() {
+  'use strict';
 
+  angular.module('foundation.offcanvas', ['foundation.core'])
+    .directive('zfOffcanvas', zfOffcanvas)
+    .service('FoundationOffcanvas', FoundationOffcanvas)
+  ;
 
-jQuery.ajax = (function(_ajax){
-	
-	var protocol = location.protocol,
-		hostname = location.hostname,
-		exRegex = RegExp(protocol + '//' + hostname),
-		YQL = 'http' + (/^https/.test(protocol)?'s':'') + '://query.yahooapis.com/v1/public/yql?callback=?',
-		query = 'select * from html where url="{URL}" and xpath="*"';
-	
-	function isExternal(url) {
-		return !exRegex.test(url) && /:\/\//.test(url);
-	}
-	
-	return function(o) {
-		
-		var url = o.url;
-		
-		if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
-			
-			// Manipulate options so that JSONP-x request is made to YQL
-			
-			o.url = YQL;
-			o.dataType = 'json';
-			
-			o.data = {
-				q: query.replace(
-					'{URL}',
-					url + (o.data ?
-						(/\?/.test(url) ? '&' : '?') + jQuery.param(o.data)
-					: '')
-				),
-				format: 'xml'
-			};
-			
-			// Since it's a JSONP request
-			// complete === success
-			if (!o.success && o.complete) {
-				o.success = o.complete;
-				delete o.complete;
-			}
-			
-			o.success = (function(_success){
-				return function(data) {
-					
-					if (_success) {
-						// Fake XHR callback.
-						_success.call(this, {
-							responseText: (data.results[0] || '')
-								// YQL screws with <script>s
-								// Get rid of them
-								.replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, '')
-						}, 'success');
-					}
-					
-				};
-			})(o.success);
-			
-		}
-		
-		return _ajax.apply(this, arguments);
-		
-	};
-	
-})(jQuery.ajax);
+  FoundationOffcanvas.$inject = ['FoundationApi'];
 
+  function FoundationOffcanvas(foundationApi) {
+    var service    = {};
 
-'use strict';
+    service.activate = activate;
+    service.deactivate = deactivate;
 
-//////////////////////////////////////////////
-//
-//  Get the tracks of each shows on each day
-//
-//////////////////////////////////////////////
-function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+    return service;
 
-$( document ).ready(function() {
-	var baseUrl = 'http://archives.bassdrivearchive.com';
+    //target should be element ID
+    function activate(target) {
+      foundationApi.publish(target, 'show');
+    }
 
-	function getDaysShowsTracks(){
-	  $.ajax({
-		url: baseUrl,
-		async: false,
-		type: 'GET',
-		success: function(res) {
-			var bassDriveDaysLinks = $(res.responseText).find('a');
-			var showDays = [];
-		  
-			//loop through each weekday
-			bassDriveDaysLinks.each(function(){
-			  // days go from "1 - Monday" to 7 - Sunday" and are written like so
-			  // Hence we check if the text of the link starts with a number greater than 0 and lesser than 7
-			  if ( this.outerText.charAt(0) > 0 && this.outerText.charAt(0) <= 7 ){
-				var day = {pathname:"", shows:[], text:"", url:""};
-				day.text = this.outerText; 
-				day.pathname = this.pathname;
-				day.url = baseUrl + this.pathname;
+    //target should be element ID
+    function deactivate(target) {
+      foundationApi.publish(target, 'hide');
+    }
 
-				//in each day, get the shows
-				$.ajax({
-					url: day.url,
-					async: false,
-					type: 'GET',
-					success: function(res) {
-						var bassDriveShowsLinks = $(res.responseText).find('a');
-						var shows = [];
+    function toggle(target) {
+      foundationApi.publish(target, 'toggle');
+    }
+  }
 
-						bassDriveShowsLinks.each(function(){
+  zfOffcanvas.$inject = ['FoundationApi'];
 
-						  var show = {artist:"", name:"", text:"", pathname:"", time:"", tracks:[], url:""};
+  function zfOffcanvas(foundationApi) {
+    var directive = {
+      restrict: 'EA',
+      templateUrl: 'components/offcanvas/offcanvas.html',
+      transclude: true,
+      scope: {
+        position: '@'
+      },
+      replace: true,
+      compile: compile
+    };
 
-						  // we don't really need to index parent directory
-						  if( $(this).attr("href") != "/"){
-						 
-							  show.text = this.outerText;
-							
-							  var textComponents;
-							
-							  // if text can be split, then tries to separate DJ and Show names
-							  if (this.outerText.indexOf("-") > -1){
-								textComponents = this.outerText.split('-');    
-								show.artist = textComponents[1].trim().replace(/\/$/, "");
-								show.name = textComponents[0].trim().replace(/\/$/, "");
+    return directive;
 
-							  } else {
-							  // use the same text for both DJ and Show
-								textComponents = this.outerText;
-								show.artist = textComponents.trim().replace(/\/$/, "");
-								show.name = textComponents.trim().replace(/\/$/, "");
+    function compile(tElement, tAttrs, transclude) {
+      var type = 'offcanvas';
 
-							  }
-							
-							  show.pathname = $(this).attr("href");
-							  show.url = day.url +  $(this).attr("href");
-							
-							  //in each show, get the tracks
-							  $.ajax({
-								  url: show.url,
-								  async: false,
-								  type: 'GET',
-								  success: function(res) {
-									  var bassDriveTracksLinks = $(res.responseText).find('a');
-									  var songs = [];
-									
-									  bassDriveTracksLinks.each(function(){
+      return {
+        pre: preLink,
+        post: postLink
+      };
 
-										var song = {date:"", name:"", text:"", pathname:"", url:""};
-										
-										// we don't really need to index parent directory
-										if( $(this).attr("href") != "/"){                                      
-										  var songText = this.outerText;
-										  song.show = show.name;
-										  song.date = songText;
-										  song.text = songText;
-										  song.pathname = $(this).attr("href");
-										  song.url = show.url.replace(/\/$/, "/") +  $(this).attr("href");
+      function preLink(scope, iElement, iAttrs, controller) {
+        iAttrs.$set('zf-closable', type);
+        document.body.classList.add('has-off-canvas');
+      }
 
-										  if(song.text != ' Parent Directory'){
-										  	songs.push(song);                                                                          
-										  }
+      function postLink(scope, element, attrs) {
+        scope.position = scope.position || 'left';
 
-										}//endif                                   
-									  
-									  });//end each
-									  
-									  show.songs = songs;                              
-									
-									}// end success
-							  }); //end ajax 
-							  shows.push(show);
-							
-						  }// endif
-				
-						});//end foreach
-						day.shows = shows;
-					}//end success
-				});//end ajax
-				showDays.push(day);
-				// console.log(showDays);    
-			  }//endif
+        scope.active = false;
+        //setup
+        foundationApi.subscribe(attrs.id, function(msg) {
+          if(msg === 'show' || msg === 'open') {
+            scope.show();
+          } else if (msg === 'close' || msg === 'hide') {
+            scope.hide();
+          } else if (msg === 'toggle') {
+            scope.toggle();
+          }
 
-			});//end for each
-		  
-			setTimeout(function(){
-			  localStorage.setItem('showDays', JSON.stringify(showDays)); 
-			}, 15000);
-		}
-	  });  
-	}
+          if (!scope.$root.$$phase) {
+            scope.$apply();
+          }
 
+          return;
+        });
 
-	getDaysShowsTracks();
-});
+        scope.hide = function() {
+          scope.active = false;
+          return;
+        };
+
+        scope.show = function() {
+          scope.active = true;
+          return;
+        };
+
+        scope.toggle = function() {
+          scope.active = !scope.active;
+          return;
+        };
+      }
+    }
+  }
+
+})();
+
 'use strict';
 
 var appRadio = angular.module('appRadio', [
@@ -52298,9 +52205,11 @@ var appRadio = angular.module('appRadio', [
 	.config(config)
 	.run(run);
 
-  config.$inject = ['$urlRouterProvider', '$locationProvider'];
 
-  function config($urlProvider, $locationProvider) {
+config.$inject = ['$urlRouterProvider', '$locationProvider'];
+
+
+function config($urlProvider, $locationProvider) {
 	$urlProvider.otherwise('/');
 
 	$locationProvider.html5Mode({
@@ -52309,20 +52218,24 @@ var appRadio = angular.module('appRadio', [
 	});
 
 	$locationProvider.hashPrefix('!');
-  }
-  
+}
 
-  function run() {
+
+function run() {
 	FastClick.attach(document.body);
-  }
-	
+}
 
 
-appRadio.controller('PlayerCtrl', function ($scope, audio){
+
+
+
+appRadio.controller('PlayerCtrl', function ($scope, $http, audio){
 	
 	// Get shows and songs from local storage
-	var showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
-	$scope.showDays = showDaysJSON;
+	// var showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
+	// $scope.showDays = showDaysJSON;
+
+
 
 	// Current song is empty for now
 	$scope.currentSong = {};
@@ -52354,12 +52267,24 @@ appRadio.controller('PlayerCtrl', function ($scope, audio){
 
 
 	$scope.loading = true;
-	setTimeout(function(){
-		showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
-		$scope.showDays = showDaysJSON;
-		$scope.loading = false;
-		$scope.$apply();
-	}, 10000);
+
+	$http.get('../resources/shows.json')
+		.then(function(data) {
+		    $scope.showDays = data.data;
+		    $scope.loading = false;
+		    console.log($scope.showDays);
+		}, function(data){
+			console.log(data);
+			console.log('error cant get JSON');
+		}
+	);
+
+	// setTimeout(function(){
+	// 	// showDaysJSON = JSON.parse(localStorage.getItem('showDays'));
+	// 	// $scope.showDays = showDaysJSON;
+	// 	$scope.loading = false;
+	// 	$scope.$apply();
+	// }, 1000);
 	
 	$scope.setCurrentSong = function(song){
 		console.log(song);

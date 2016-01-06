@@ -1,4 +1,9 @@
 .player-wrapper{
+	@include breakpoint(medium) {
+		-webkit-order: 2; 
+		-ms-order: 2; 
+		order: 2;
+	}
 
 	.card img{
 		background-color: $dark-color; 

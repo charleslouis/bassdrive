@@ -38,8 +38,9 @@ var paths = {
 				'./node_modules/foundation-apps/js/angular/components/common/common.js',
 				'./node_modules/foundation-apps/js/angular/components/popup/popup.js',
 				'./node_modules/foundation-apps/js/angular/components/tabs/tabs.js',
-				'./radio/js/custom/yql.js',
-				'./radio/js/custom/parse-bassdrive.js',
+				'./node_modules/foundation-apps/js/angular/components/offcanvas/offcanvas.js',
+				// './radio/js/custom/yql.js',
+				// './radio/js/custom/parse-bassdrive.js',
 				'./radio/js/custom/app.js'
 			],
 			sources: ['./radio/js/custom/*'],

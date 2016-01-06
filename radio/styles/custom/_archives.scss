@@ -1,3 +1,11 @@
+.archives-wrapper{
+	@include breakpoint(medium) {
+		-webkit-order: 1; 
+		-ms-order: 1; 
+		order: 1; 
+	}	
+}
+
 .archives-title{
 	color: $white; 
 	padding-left: 1rem;
